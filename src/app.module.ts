@@ -9,6 +9,8 @@ import { MainModule } from './main/main.module'
 import { FileModule } from './file/file.module'
 import { join } from 'path'
 import { ServeStaticModule } from '@nestjs/serve-static'
+import { CategoryModule } from './category/category.module'
+import { Category } from './typeorm/entities/Category'
 
 @Module({
 	imports: [
@@ -20,7 +22,7 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Main],
+			entities: [Main, Category],
 			synchronize: true
 		}),
 		ServeStaticModule.forRoot({
@@ -28,7 +30,8 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 		}),
 		AuthModule,
 		MainModule,
-		FileModule
+		FileModule,
+		CategoryModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
