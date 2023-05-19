@@ -4,7 +4,8 @@ import { resolve } from 'path'
 import * as uuid from 'uuid'
 
 export enum FileType {
-	LOGO = 'logo'
+	LOGO = 'logo',
+	BANNER = 'banner'
 }
 
 @Injectable()

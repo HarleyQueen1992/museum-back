@@ -11,6 +11,7 @@ import { join } from 'path'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { CategoryModule } from './category/category.module'
 import { Category } from './typeorm/entities/Category'
+import { EventModule } from './event/event.module'
 
 @Module({
 	imports: [
@@ -22,8 +23,9 @@ import { Category } from './typeorm/entities/Category'
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Main, Category],
-			synchronize: true
+			entities: [Main, Category, Event],
+			synchronize: true,
+			autoLoadEntities: true
 		}),
 		ServeStaticModule.forRoot({
 			rootPath: join(__dirname, 'static')
@@ -31,7 +33,8 @@ import { Category } from './typeorm/entities/Category'
 		AuthModule,
 		MainModule,
 		FileModule,
-		CategoryModule
+		CategoryModule,
+		EventModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

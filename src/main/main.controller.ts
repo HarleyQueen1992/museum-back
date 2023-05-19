@@ -7,7 +7,8 @@ import {
 	Post,
 	Put,
 	UploadedFiles,
-	UseInterceptors
+	UseInterceptors,
+	ValidationPipe
 } from '@nestjs/common'
 import { MainService } from './main.service'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
@@ -26,7 +27,7 @@ export class MainController {
 	@Post()
 	@Auth()
 	@UseInterceptors(FileFieldsInterceptor([{ name: 'logo', maxCount: 1 }]))
-	creaetMain(@UploadedFiles() files, @Body() dto: MainDto) {
+	creaetMain(@UploadedFiles() files, @Body(new ValidationPipe()) dto: MainDto) {
 		const { logo } = files
 
 		return this.mainService.createMain(dto, logo && logo[0])
@@ -38,7 +39,7 @@ export class MainController {
 	async updateMainById(
 		@Param('id') id: number,
 		@UploadedFiles() files,
-		@Body() dto: MainDto
+		@Body(new ValidationPipe()) dto: MainDto
 	) {
 		const { logo } = files
 
