@@ -12,6 +12,8 @@ import { ServeStaticModule } from '@nestjs/serve-static'
 import { CategoryModule } from './category/category.module'
 import { Category } from './typeorm/entities/Category'
 import { EventModule } from './event/event.module'
+import { Audience } from './typeorm/entities/Audience'
+import { AudienceModule } from './audience/audience.module';
 
 @Module({
 	imports: [
@@ -23,7 +25,7 @@ import { EventModule } from './event/event.module'
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Main, Category, Event],
+			entities: [Main, Category, Event, Audience],
 			synchronize: true,
 			autoLoadEntities: true
 		}),
@@ -34,7 +36,8 @@ import { EventModule } from './event/event.module'
 		MainModule,
 		FileModule,
 		CategoryModule,
-		EventModule
+		EventModule,
+		AudienceModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

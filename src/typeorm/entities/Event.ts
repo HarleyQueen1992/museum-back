@@ -1,5 +1,13 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import {
+	Column,
+	Entity,
+	JoinTable,
+	ManyToMany,
+	ManyToOne,
+	PrimaryGeneratedColumn
+} from 'typeorm'
 import { Category } from './Category'
+import { Audience } from './Audience'
 
 @Entity({ name: 'event' })
 export class Event {
@@ -41,4 +49,8 @@ export class Event {
 
 	@ManyToOne(() => Category, category => category.events)
 	category: Category
+
+	@ManyToMany(() => Audience)
+	@JoinTable()
+	audits: Audience[]
 }
