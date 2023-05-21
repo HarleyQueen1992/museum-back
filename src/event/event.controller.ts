@@ -3,6 +3,7 @@ import {
 	Controller,
 	Delete,
 	Get,
+	HttpCode,
 	Param,
 	Post,
 	Put,
@@ -32,7 +33,7 @@ export class EventController {
 		@UploadedFiles() files,
 		@Body(new ValidationPipe()) dto: EventDto
 	) {
-		const { banner } = files
+		const { banner } = files ? files : { banner: null }
 		return this.eventService.createEvent(dto, banner && banner[0])
 	}
 
@@ -48,6 +49,7 @@ export class EventController {
 		return this.eventService.updateEventById(id, dto, banner && banner[0])
 	}
 	@Delete(':id')
+	@HttpCode(204)
 	@Auth()
 	deleteEventById(@Param('id') id: number) {
 		return this.eventService.deleteEventById(id)

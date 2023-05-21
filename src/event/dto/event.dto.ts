@@ -1,7 +1,8 @@
 import { Transform } from 'class-transformer'
 import {
+	IsArray,
 	IsDate,
-	IsNumberString,
+	IsNumber,
 	IsOptional,
 	IsPhoneNumber,
 	IsString,
@@ -23,7 +24,7 @@ export class EventDto {
 
 	@IsString()
 	@IsOptional()
-	banner: string
+	banner?: string
 
 	@IsString()
 	schedule: string
@@ -43,9 +44,12 @@ export class EventDto {
 	@IsString()
 	aboutMe: string
 
-	@IsNumberString()
+	@IsNumber()
 	adultPrice: number
 
-	@IsNumberString()
+	@IsNumber()
 	childPrice: number
+
+	@IsArray()
+	audience: number[]
 }

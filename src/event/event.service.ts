@@ -1,14 +1,21 @@
+import { join } from 'path'
 import { Injectable, Query } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Event } from 'src/typeorm/entities/Event'
-import { Like, Repository } from 'typeorm'
+import { In, Like, Repository } from 'typeorm'
 import { EventDto } from './dto/event.dto'
 import { FileService, FileType } from 'src/file/file.service'
+import { Audience } from 'src/typeorm/entities/Audience'
+import { Between } from 'typeorm'
+import { MoreThan } from 'typeorm'
+import { LessThan } from 'typeorm'
 
 @Injectable()
 export class EventService {
 	constructor(
 		@InjectRepository(Event) private eventRepository: Repository<Event>,
+		@InjectRepository(Audience)
+		private audienceRepository: Repository<Audience>,
 		private fileService: FileService
 	) {}
 
@@ -16,10 +23,16 @@ export class EventService {
 		const limit = query.limit || 10
 		const page = query.page || 0
 		const slug = query.slug || ''
+		const date = query.date || null
+		const audit = (query.audit && query.audit.split(',')) || null
 
 		const [result, total] = await this.eventRepository.findAndCount({
+			// relations: ['audits'],
 			where: {
-				name: Like('%' + slug + '%')
+				name: Like('%' + slug + '%'),
+				audits: { id: audit && In(audit) },
+				startDate: date && LessThan(date),
+				expirationDate: date && MoreThan(date)
 			},
 			take: limit,
 			skip: page * limit
@@ -37,7 +50,17 @@ export class EventService {
 		if (banner) {
 			bannerPath = this.fileService.createFile(FileType.BANNER, banner)
 		}
-		const event = this.eventRepository.create({ ...dto, banner: bannerPath })
+		const audits = await this.audienceRepository.find({
+			where: {
+				id: In(dto.audience)
+			}
+		})
+
+		const event = this.eventRepository.create({
+			audits,
+			...dto,
+			banner: bannerPath
+		})
 		return await this.eventRepository.save(event)
 	}
 
@@ -54,6 +77,6 @@ export class EventService {
 	}
 
 	async deleteEventById(id: number) {
-		return await this.eventRepository.delete({ id })
+		await this.eventRepository.delete({ id })
 	}
 }

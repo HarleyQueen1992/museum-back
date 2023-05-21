@@ -35,10 +35,10 @@ export class Event {
 	@Column({ name: 'about_me' })
 	aboutMe: string
 
-	@Column({ name: 'start_date' })
+	@Column({ name: 'start_date', type: 'date' })
 	startDate: Date
 
-	@Column({ name: 'expiration_date' })
+	@Column({ name: 'expiration_date', type: 'date' })
 	expirationDate: Date
 
 	@Column({ name: 'adult_price' })

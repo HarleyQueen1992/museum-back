@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common'
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Post,
+	ValidationPipe
+} from '@nestjs/common'
 import { CategoryService } from './category.service'
 import { CategoryDto } from './dto/category.dto'
 import { Auth } from 'src/auth/decorators/auth.decorator'
@@ -14,7 +22,7 @@ export class CategoryController {
 
 	@Post()
 	@Auth()
-	createCategory(@Body() dto: CategoryDto) {
+	createCategory(@Body(new ValidationPipe()) dto: CategoryDto) {
 		return this.categoryService.createCategory(dto)
 	}
 
