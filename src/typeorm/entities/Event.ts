@@ -4,10 +4,12 @@ import {
 	JoinTable,
 	ManyToMany,
 	ManyToOne,
+	OneToMany,
 	PrimaryGeneratedColumn
 } from 'typeorm'
 import { Category } from './Category'
 import { Audience } from './Audience'
+import { DateOf } from './DateOf'
 
 @Entity({ name: 'event' })
 export class Event {
@@ -49,6 +51,9 @@ export class Event {
 
 	@ManyToOne(() => Category, category => category.events)
 	category: Category
+
+	@OneToMany(() => DateOf, date => date.event)
+	dates: DateOf[]
 
 	@ManyToMany(() => Audience)
 	@JoinTable()

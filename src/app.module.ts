@@ -12,6 +12,10 @@ import { Category } from './typeorm/entities/Category'
 import { EventModule } from './event/event.module'
 import { Audience } from './typeorm/entities/Audience'
 import { AudienceModule } from './audience/audience.module'
+import { DateOf } from './typeorm/entities/DateOf'
+import { ScheduleModule } from './schedule/schedule.module'
+import { Time } from './typeorm/entities/Time'
+import { TimeModule } from './time/time.module'
 
 @Module({
 	imports: [
@@ -23,7 +27,7 @@ import { AudienceModule } from './audience/audience.module'
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Category, Event, Audience],
+			entities: [Category, Event, Audience, DateOf, Time],
 			synchronize: true,
 			autoLoadEntities: true
 		}),
@@ -34,7 +38,9 @@ import { AudienceModule } from './audience/audience.module'
 		FileModule,
 		CategoryModule,
 		EventModule,
-		AudienceModule
+		AudienceModule,
+		ScheduleModule,
+		TimeModule
 	],
 	controllers: [AppController],
 	providers: [AppService]
