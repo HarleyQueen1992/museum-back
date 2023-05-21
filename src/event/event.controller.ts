@@ -26,15 +26,16 @@ export class EventController {
 		return this.eventService.pagination(param)
 	}
 
-	@Post()
+	@Post(':id')
 	@Auth()
 	@UseInterceptors(FileFieldsInterceptor([{ name: 'banner', maxCount: 1 }]))
 	createEvent(
+		@Param('id') id: number,
 		@UploadedFiles() files,
 		@Body(new ValidationPipe()) dto: EventDto
 	) {
 		const { banner } = files ? files : { banner: null }
-		return this.eventService.createEvent(dto, banner && banner[0])
+		return this.eventService.createEvent(id, dto, banner && banner[0])
 	}
 
 	@Put(':id')
