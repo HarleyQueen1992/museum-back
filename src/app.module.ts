@@ -18,6 +18,7 @@ import { Time } from './typeorm/entities/Time'
 import { TimeModule } from './time/time.module'
 import { Ticket } from './typeorm/entities/Ticket'
 import { Booking } from './typeorm/entities/Booking'
+import { BookingModule } from './booking/booking.module';
 
 @Module({
 	imports: [
@@ -42,7 +43,8 @@ import { Booking } from './typeorm/entities/Booking'
 		EventModule,
 		AudienceModule,
 		ScheduleModule,
-		TimeModule
+		TimeModule,
+		BookingModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

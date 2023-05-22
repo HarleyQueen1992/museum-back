@@ -7,7 +7,7 @@ export class Ticket {
 	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number
 
-	@Column({ name: 'time', type: 'time' })
+	@Column({ name: 'is_child' })
 	isChild: boolean
 
 	@ManyToOne(() => Time, time => time.tickets, {
