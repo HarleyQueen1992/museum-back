@@ -16,6 +16,8 @@ import { DateOf } from './typeorm/entities/DateOf'
 import { ScheduleModule } from './schedule/schedule.module'
 import { Time } from './typeorm/entities/Time'
 import { TimeModule } from './time/time.module'
+import { Ticket } from './typeorm/entities/Ticket'
+import { Booking } from './typeorm/entities/Booking'
 
 @Module({
 	imports: [
@@ -27,7 +29,7 @@ import { TimeModule } from './time/time.module'
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Category, Event, Audience, DateOf, Time],
+			entities: [Category, Event, Audience, DateOf, Time, Ticket, Booking],
 			synchronize: true,
 			autoLoadEntities: true
 		}),

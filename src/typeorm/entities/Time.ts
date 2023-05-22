@@ -1,6 +1,12 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Event } from './Event'
+import {
+	Column,
+	Entity,
+	ManyToOne,
+	OneToMany,
+	PrimaryGeneratedColumn
+} from 'typeorm'
 import { DateOf } from './DateOf'
+import { Ticket } from './Ticket'
 
 @Entity({ name: 'time' })
 export class Time {
@@ -17,4 +23,7 @@ export class Time {
 		onDelete: 'CASCADE'
 	})
 	date: DateOf
+
+	@OneToMany(() => Ticket, ticket => ticket.time)
+	tickets: Ticket[]
 }
