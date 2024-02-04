@@ -36,7 +36,11 @@ export class BookingService {
 						date: {
 							date: true,
 							event: {
-								name: true
+								name: true,
+								banner: true,
+								adultPrice: true,
+								childPrice: true,
+								address: true
 							}
 						}
 					}
@@ -58,7 +62,6 @@ export class BookingService {
 		let tickets = []
 
 		for (let item of dto.tickets) {
-
 			const time = await this.timeRepository.findOne({
 				where: {
 					id: item.id

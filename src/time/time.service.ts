@@ -23,6 +23,28 @@ export class TimeService {
 		})
 	}
 
+	async findTimeByDetail(id: number) {
+		return await this.timeRepository.findOne({
+			where: {
+				id
+			},
+			relations: ['date', 'date.event'],
+			select: {
+				time: true,
+				id: true,
+				date: {
+					date: true,
+					event: {
+						name: true,
+						address: true,
+						adultPrice: true,
+						childPrice: true
+					}
+				}
+			}
+		})
+	}
+
 	async createTimeForSchedule(id: number, dto: TimeDto) {
 		const date = await this.dateRepository.findOneBy({ id })
 

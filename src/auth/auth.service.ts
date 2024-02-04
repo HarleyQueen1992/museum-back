@@ -12,14 +12,14 @@ export class AuthService {
 
 	async login(dto: AuthDto) {
 		const user = await this.validateUser(dto)
-		const tokens = await this.issueToken(user.login)
+		const tokens = this.issueToken(user.login)
 		return { ...tokens }
 	}
 	async getNewTokens(refreshToken: string) {
 		try {
 			const result = await this.jwt.verifyAsync(refreshToken)
 
-			const tokens = await this.issueToken(result.login)
+			const tokens = this.issueToken(result.login)
 
 			return { ...tokens }
 		} catch {
@@ -27,7 +27,7 @@ export class AuthService {
 		}
 	}
 
-	private async issueToken(login: string) {
+	private issueToken(login: string) {
 		const data = {
 			login: login
 		}
@@ -35,8 +35,9 @@ export class AuthService {
 		const accesToken = this.jwt.sign(data, {
 			expiresIn: '1h'
 		})
+
 		const refreshToken = this.jwt.sign(data, {
-			expiresIn: '7d'
+			expiresIn: '30d'
 		})
 
 		return { accesToken, refreshToken }
@@ -46,7 +47,7 @@ export class AuthService {
 		if (process.env.LOGIN !== dto.login)
 			throw new NotFoundException('User not found')
 		if (process.env.PASSWORD !== dto.password)
-			throw new UnauthorizedException('Invalid password')
+			throw new NotFoundException('Invalid password')
 		return dto
 	}
 }

@@ -16,14 +16,21 @@ import { EventService } from './event.service'
 import { Auth } from 'src/auth/decorators/auth.decorator'
 import { EventDto } from './dto/event.dto'
 import { FileFieldsInterceptor } from '@nestjs/platform-express'
+import { QueryDto } from './dto/query.dto'
+import { EventUpdateDto } from './dto/event-update.dto'
 
-@Controller('event')
+@Controller('events')
 export class EventController {
 	constructor(private readonly eventService: EventService) {}
 
 	@Get()
-	findAll(@Query() param: any) {
+	findAll(@Query() param: QueryDto) {
 		return this.eventService.pagination(param)
+	}
+
+	@Get(':id')
+	findById(@Param('id') id: number) {
+		return this.eventService.findById(id)
 	}
 
 	@Post(':id')
@@ -44,7 +51,7 @@ export class EventController {
 	updateEventById(
 		@UploadedFiles() files,
 		@Param('id') id: number,
-		@Body(new ValidationPipe()) dto: EventDto
+		@Body(new ValidationPipe()) dto: EventUpdateDto
 	) {
 		const { banner } = files
 		return this.eventService.updateEventById(id, dto, banner && banner[0])

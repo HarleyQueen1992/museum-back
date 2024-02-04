@@ -14,9 +14,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 	}
 
 	async validate({ login }): Promise<any> {
-		console.log('VALIDATE')
-		console.log(login)
-
 		if (process.env.LOGIN !== login) {
 			throw new UnauthorizedException()
 		}

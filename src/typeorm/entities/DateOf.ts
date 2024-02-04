@@ -16,7 +16,9 @@ export class DateOf {
 	@Column({ name: 'date', type: 'date' })
 	date: Date
 
-	@ManyToOne(() => Event, event => event.dates)
+	@ManyToOne(() => Event, event => event.dates, {
+		onDelete: 'CASCADE'
+	})
 	event: Event
 
 	@OneToMany(() => Time, time => time.date)

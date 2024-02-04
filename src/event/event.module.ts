@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { FileService } from 'src/file/file.service'
 import { Audience } from 'src/typeorm/entities/Audience'
 import { Category } from 'src/typeorm/entities/Category'
+import { FileModule } from 'src/file/file.module'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Event, Audience, Category])],
+	imports: [TypeOrmModule.forFeature([Event, Audience, Category]), FileModule],
 	controllers: [EventController],
 	providers: [EventService, FileService]
 })

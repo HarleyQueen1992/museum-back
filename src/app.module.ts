@@ -5,7 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { AuthModule } from './auth/auth.module'
 import { ConfigModule } from '@nestjs/config'
 import { FileModule } from './file/file.module'
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { ServeStaticModule } from '@nestjs/serve-static'
 import { CategoryModule } from './category/category.module'
 import { Category } from './typeorm/entities/Category'
@@ -18,7 +18,9 @@ import { Time } from './typeorm/entities/Time'
 import { TimeModule } from './time/time.module'
 import { Ticket } from './typeorm/entities/Ticket'
 import { Booking } from './typeorm/entities/Booking'
-import { BookingModule } from './booking/booking.module';
+import { BookingModule } from './booking/booking.module'
+import { News } from './typeorm/entities/News'
+import { NewsModule } from './news/news.module'
 
 @Module({
 	imports: [
@@ -30,12 +32,21 @@ import { BookingModule } from './booking/booking.module';
 			username: 'admin',
 			password: 'secret',
 			database: 'museum',
-			entities: [Category, Event, Audience, DateOf, Time, Ticket, Booking],
+			entities: [
+				Category,
+				Event,
+				Audience,
+				DateOf,
+				Time,
+				Ticket,
+				Booking,
+				News
+			],
 			synchronize: true,
 			autoLoadEntities: true
 		}),
 		ServeStaticModule.forRoot({
-			rootPath: join(__dirname, 'static')
+			rootPath: resolve(__dirname, 'static')
 		}),
 		AuthModule,
 		FileModule,
@@ -44,7 +55,8 @@ import { BookingModule } from './booking/booking.module';
 		AudienceModule,
 		ScheduleModule,
 		TimeModule,
-		BookingModule
+		BookingModule,
+		NewsModule
 	],
 	controllers: [AppController],
 	providers: [AppService]

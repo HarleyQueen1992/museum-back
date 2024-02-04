@@ -11,6 +11,7 @@ import { MoreThan } from 'typeorm'
 import { LessThan } from 'typeorm'
 import { Category } from 'src/typeorm/entities/Category'
 import { QueryDto } from './dto/query.dto'
+import { EventUpdateDto } from './dto/event-update.dto'
 
 @Injectable()
 export class EventService {
@@ -41,6 +42,23 @@ export class EventService {
 				startDate: date && LessThan(date),
 				expirationDate: date && MoreThan(date)
 			},
+			relations: ['category'],
+			select: {
+				id: true,
+				category: {
+					id: true,
+					name: true
+				},
+				startDate: true,
+				expirationDate: true,
+				name: true,
+				address: true,
+				banner: true,
+				created_at: true
+			},
+			order: {
+				created_at: 'DESC'
+			},
 			take: limit,
 			skip: page * limit
 		})
@@ -49,6 +67,12 @@ export class EventService {
 			result,
 			total
 		}
+	}
+	async findById(id: number) {
+		return await this.eventRepository.findOne({
+			where: { id },
+			relations: ['category', 'audits']
+		})
 	}
 
 	async createEvent(id: number, dto: EventDto, banner = null) {
@@ -74,13 +98,16 @@ export class EventService {
 		return await this.eventRepository.save(event)
 	}
 
-	async updateEventById(id: number, dto: EventDto, banner = null) {
+	async updateEventById(id: number, dto: EventUpdateDto, banner = null) {
 		if (!banner) {
 			await this.eventRepository.update(id, { ...dto })
 		} else {
 			const bannerPath = this.fileService.createFile(FileType.BANNER, banner)
 
-			await this.eventRepository.update(id, { ...dto, banner: bannerPath })
+			await this.eventRepository.update(id, {
+				...dto,
+				banner: bannerPath
+			})
 		}
 
 		return await this.eventRepository.findOneBy({ id })

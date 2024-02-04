@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common'
 import { ScheduleService } from './schedule.service'
 import { ScheduleDto } from './dto/schedule.dto'
+import { Auth } from 'src/auth/decorators/auth.decorator'
 
 @Controller('schedule')
 export class ScheduleController {
@@ -20,6 +21,7 @@ export class ScheduleController {
 		return this.scheduleService.findScheduleByEvent(id)
 	}
 
+	@Auth()
 	@Post(':id')
 	createSchedule(
 		@Param('id') id: number,
@@ -29,6 +31,7 @@ export class ScheduleController {
 	}
 
 	@Delete(':id')
+	@Auth()
 	@HttpCode(204)
 	deleteShedule(@Param('id') id: number) {
 		return this.scheduleService.deleteDateById(id)
