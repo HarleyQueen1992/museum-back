@@ -19,7 +19,8 @@ export class FileService {
 		try {
 			const fileExtension = file.originalname.split('.').pop()
 			const fileName = uuid.v4() + '.' + fileExtension
-			const filePath = resolve(__dirname, '..', 'static', type)
+			// const filePath = resolve(__dirname, '..', 'static', type)
+			const filePath = resolve('images', type)
 			if (!existsSync(filePath)) {
 				mkdirSync(filePath, { recursive: true })
 			}
