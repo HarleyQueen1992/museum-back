@@ -1,22 +1,22 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
-import { Time } from './Time'
-import { Booking } from './Booking'
+import { Event } from './Event'
 
 @Entity({ name: 'ticket' })
 export class Ticket {
 	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number
 
-	@Column({ name: 'is_child' })
-	isChild: boolean
+	@Column({ name: 'title' })
+	title: string
 
-	@ManyToOne(() => Time, time => time.tickets, {
+	@Column({ name: 'sub_title' })
+	sub_title: string
+
+	@ManyToOne(() => Event, event => event.tickets, {
 		onDelete: 'CASCADE'
 	})
-	time: Time
+	event: Event
 
-	@ManyToOne(() => Booking, booking => booking.tickets, {
-		onDelete: 'CASCADE'
-	})
-	booking: Booking
+	@Column({ name: 'price' })
+	price: number
 }

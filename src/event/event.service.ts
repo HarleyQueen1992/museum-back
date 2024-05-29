@@ -6,54 +6,40 @@ import { In, Like, Repository } from 'typeorm'
 import { EventDto } from './dto/event.dto'
 import { FileService, FileType } from 'src/file/file.service'
 import { Audience } from 'src/typeorm/entities/Audience'
-import { Between } from 'typeorm'
-import { MoreThan } from 'typeorm'
-import { LessThan } from 'typeorm'
-import { Category } from 'src/typeorm/entities/Category'
 import { QueryDto } from './dto/query.dto'
 import { EventUpdateDto } from './dto/event-update.dto'
+import { log } from 'console'
 
 @Injectable()
 export class EventService {
 	constructor(
 		@InjectRepository(Event) private eventRepository: Repository<Event>,
-		@InjectRepository(Category)
-		private categoryRepository: Repository<Category>,
 		@InjectRepository(Audience)
 		private audienceRepository: Repository<Audience>,
 		private fileService: FileService
 	) {}
 
 	async pagination(query: QueryDto) {
+		console.log(query);
 		const limit = query.limit || 10
 		const page = query.page || 0
-		const slug = query.slug || ''
-		const date = query.date || null
-		const category = query.category || null
-		const audit = (query.audit && query.audit.split(',')) || null
-
+		const audit = query.audit || null
+		
+		
 		const [result, total] = await this.eventRepository.findAndCount({
 			where: {
-				name: Like('%' + slug + '%'),
-				audits: { id: audit && In(audit) },
-				category: {
-					id: category && category
-				},
-				startDate: date && LessThan(date),
-				expirationDate: date && MoreThan(date)
+				audience: { id: audit && +audit  },
 			},
-			relations: ['category'],
+			relations: ['audience'],
 			select: {
 				id: true,
-				category: {
+				title: true,
+				audience: {
 					id: true,
 					name: true
 				},
-				startDate: true,
-				expirationDate: true,
-				name: true,
-				address: true,
-				banner: true,
+				sub_title: true,
+				preview: true,
 				created_at: true
 			},
 			order: {
@@ -71,42 +57,59 @@ export class EventService {
 	async findById(id: number) {
 		return await this.eventRepository.findOne({
 			where: { id },
-			relations: ['category', 'audits']
+			relations: ['audience']
 		})
 	}
 
 	async createEvent(id: number, dto: EventDto, banner = null) {
+		
 		let bannerPath = null
 
 		if (banner) {
 			bannerPath = this.fileService.createFile(FileType.BANNER, banner)
 		}
-		const audits = await this.audienceRepository.find({
-			where: {
-				id: In(dto.audience)
+		const audits = await this.audienceRepository.findOne({
+				where: { id },
 			}
-		})
-
-		const category = await this.categoryRepository.findOneBy({ id })
-
+		)
+		console.log(audits,
+			dto,
+			bannerPath);
+		
 		const event = this.eventRepository.create({
-			audits,
-			category,
+			audience: audits,
 			...dto,
 			banner: bannerPath
 		})
 		return await this.eventRepository.save(event)
 	}
 
-	async updateEventById(id: number, dto: EventUpdateDto, banner = null) {
-		if (!banner) {
+	async updateEventById(id: number, dto: EventUpdateDto, banner = null, preview = null) {
+
+		
+		if (!banner && !preview) {
 			await this.eventRepository.update(id, { ...dto })
-		} else {
-			const bannerPath = this.fileService.createFile(FileType.BANNER, banner)
+		} else if (!banner) {
+			const previewPath = this.fileService.createFile(FileType.PREVIEW, preview)
 
 			await this.eventRepository.update(id, {
 				...dto,
-				banner: bannerPath
+				preview: previewPath
+			})
+		} else if (!preview) {
+			const bannerPath = this.fileService.createFile(FileType.BANNER, banner)
+			await this.eventRepository.update(id, {
+				...dto,
+				banner: bannerPath,
+			})
+		} else {
+			const bannerPath = this.fileService.createFile(FileType.BANNER, banner)
+			const previewPath = this.fileService.createFile(FileType.PREVIEW, preview)
+
+			await this.eventRepository.update(id, {
+				...dto,
+				banner: bannerPath,
+				preview: previewPath
 			})
 		}
 

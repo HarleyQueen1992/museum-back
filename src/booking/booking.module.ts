@@ -4,10 +4,9 @@ import { BookingController } from './booking.controller'
 import { TypeOrmModule } from '@nestjs/typeorm'
 import { Booking } from 'src/typeorm/entities/Booking'
 import { Ticket } from 'src/typeorm/entities/Ticket'
-import { Time } from 'src/typeorm/entities/Time'
 
 @Module({
-	imports: [TypeOrmModule.forFeature([Booking, Ticket, Time])],
+	imports: [TypeOrmModule.forFeature([Booking, Ticket])],
 	controllers: [BookingController],
 	providers: [BookingService]
 })

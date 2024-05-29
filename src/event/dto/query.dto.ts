@@ -1,5 +1,4 @@
 import {
-	IsDateString,
 	IsNumberString,
 	IsOptional,
 	IsString
@@ -13,18 +12,6 @@ export class QueryDto {
 	@IsNumberString()
 	@IsOptional()
 	page?: number
-
-	@IsString()
-	@IsOptional()
-	slug?: string
-
-	@IsDateString()
-	@IsOptional()
-	date?: Date
-
-	@IsNumberString()
-	@IsOptional()
-	category?: number
 
 	@IsString()
 	@IsOptional()

@@ -6,50 +6,35 @@ import {
 	ManyToMany,
 	ManyToOne,
 	OneToMany,
+	OneToOne,
 	PrimaryGeneratedColumn,
 	UpdateDateColumn
 } from 'typeorm'
-import { Category } from './Category'
 import { Audience } from './Audience'
-import { DateOf } from './DateOf'
+import { Ticket } from './Ticket'
 
 @Entity({ name: 'event' })
 export class Event {
 	@PrimaryGeneratedColumn({ type: 'bigint' })
 	id: number
 
-	@Column({ name: 'name' })
-	name: string
+	@Column({ name: 'title' })
+	title: string
 
-	@Column({ name: 'phone' })
-	phone: string
-
-	@Column({ name: 'address' })
-	address: string
+	@Column({ name: 'sub_title' })
+	sub_title: string
 
 	@Column({ name: 'banner', nullable: true })
 	banner: string
 
-	@Column({ name: 'schedule' })
-	schedule: string
+	@Column({ name: 'preview', nullable: true })
+	preview: string
 
-	@Column({ name: 'description', length: 400 })
+	@Column({ name: 'description'})
 	description: string
 
 	@Column({ name: 'about_me', type: 'text' })
 	aboutMe: string
-
-	@Column({ name: 'start_date', type: 'date' })
-	startDate: Date
-
-	@Column({ name: 'expiration_date', type: 'date' })
-	expirationDate: Date
-
-	@Column({ name: 'adult_price' })
-	adultPrice: number
-
-	@Column({ name: 'child_price' })
-	childPrice: number
 
 	@CreateDateColumn()
 	created_at: Date
@@ -57,19 +42,14 @@ export class Event {
 	@UpdateDateColumn()
 	updated_at: Date
 
-	@ManyToOne(() => Category, category => category.events, {
-		onDelete: 'CASCADE'
-	})
-	category: Category
 
-	@OneToMany(() => DateOf, date => date.event, {
+	@ManyToOne(() => Audience, audience => audience.events, {
 		onDelete: 'CASCADE'
 	})
-	dates: DateOf[]
+	audience: Audience
 
-	@ManyToMany(() => Audience, {
-		onDelete: 'CASCADE'
-	})
-	@JoinTable()
-	audits: Audience[]
+	@OneToMany(() => Ticket, ticket => ticket.event)
+	tickets: Ticket[]
+
+	
 }

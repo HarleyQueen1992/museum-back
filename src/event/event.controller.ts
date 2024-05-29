@@ -39,7 +39,7 @@ export class EventController {
 	createEvent(
 		@Param('id') id: number,
 		@UploadedFiles() files,
-		@Body(new ValidationPipe()) dto: EventDto
+		@Body(new ValidationPipe())dto: EventDto
 	) {
 		const { banner } = files ? files : { banner: null }
 		return this.eventService.createEvent(id, dto, banner && banner[0])
@@ -47,14 +47,14 @@ export class EventController {
 
 	@Put(':id')
 	@Auth()
-	@UseInterceptors(FileFieldsInterceptor([{ name: 'banner', maxCount: 1 }]))
+	@UseInterceptors(FileFieldsInterceptor([{ name: 'banner', maxCount: 1 }, { name: 'preview', maxCount: 1}]))
 	updateEventById(
-		@UploadedFiles() files,
+		@UploadedFiles() files: {banner?: Express.Multer.File[], preview?: Express.Multer.File[]},
 		@Param('id') id: number,
 		@Body(new ValidationPipe()) dto: EventUpdateDto
 	) {
-		const { banner } = files
-		return this.eventService.updateEventById(id, dto, banner && banner[0])
+		const { banner, preview } = files
+		return this.eventService.updateEventById(id, dto, banner && banner[0], preview && preview[0])
 	}
 	@Delete(':id')
 	@HttpCode(204)

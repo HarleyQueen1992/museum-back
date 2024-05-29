@@ -8,48 +8,29 @@ import {
 	IsString,
 	MaxLength
 } from 'class-validator'
+import { Audience } from 'src/typeorm/entities/Audience'
 
 export class EventDto {
 	@IsString()
 	@MaxLength(200)
-	name: string
+	title: string
 
 	@IsString()
-	@IsPhoneNumber()
-	phone: string
-
-	@IsString()
-	@MaxLength(150)
-	address: string
+	@MaxLength(200)
+	sub_title: string
 
 	@IsString()
 	@IsOptional()
 	banner?: string
 
 	@IsString()
-	schedule: string
+	@IsOptional()
+	preview?: string
 
 	@IsString()
-	@MaxLength(400)
 	description: string
-
-	@Transform(({ value }) => new Date(value))
-	@IsDate()
-	startDate: Date
-
-	@Transform(({ value }) => new Date(value))
-	@IsDate()
-	expirationDate: Date
 
 	@IsString()
 	aboutMe: string
 
-	@IsNumber()
-	adultPrice: number
-
-	@IsNumber()
-	childPrice: number
-
-	@IsArray()
-	audience: number[]
 }

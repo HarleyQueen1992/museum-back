@@ -7,6 +7,7 @@ import * as uuid from 'uuid'
 export enum FileType {
 	LOGO = 'logo',
 	BANNER = 'banner',
+	PREVIEW = 'preview',
 	NEWS = 'news'
 }
 
